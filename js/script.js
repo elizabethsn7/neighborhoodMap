@@ -14,11 +14,16 @@ function loadData() {
     // load streetview
 
     // YOUR CODE GOES HERE!
-    $("button").click(function() {
-        var street = $('input').val(text)
-        var city = $('input').val()
-    })
+    var street = $('#street').val();
+    var city = $('#city').val();
+    var address = street + ', ' + city;
+    console.log(address);
 
+    var streetUrl = 'https://maps.googleapis.com/maps/api/streetview?&size=600x400&location=' + address + '';
+    console.log(streetUrl);
+
+    $body.append('<img class="bgimg" src="' + streetUrl + '">');
+    
     return false;
 };
 
