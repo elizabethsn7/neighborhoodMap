@@ -11,64 +11,38 @@ function loadData() {
     $wikiElem.text("");
     $nytElem.text("");
 
-    
-
-    // YOUR CODE GOES HERE!
     var street = $('#street').val();
     var city = $('#city').val();
     var address = street + ', ' + city;
-    console.log(address);
 
     // load streetview
     var streetUrl = 'https://maps.googleapis.com/maps/api/streetview?&size=600x400&location=' + address + '';
     console.log(streetUrl);
 
-    //I got confused here because of the fact that the src is using the + sign on both sides 
-    //of the streetUrl
     $body.append('<img class="bgimg" src="' + streetUrl + '">');
-    
+
+
     //load nytimes
-    var nytUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json';
-    var nytApyKey = 'de86a3351556445e91e98a55763166a7';
+    var nytUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' 
+    + city + '&sort=newest&api-key=de86a3351556445e91e98a55763166a7'
+    
+    $.getJSON(nytUrl, function(data) {
+         $nytHeaderElem.text('New York Times Articles About ' + city);
 
-    //YOUR CODE GOES HERE!
-
-    $.getJSON('nytUrl', function(data) {
-        var articles = [];
-        var i = 0;
-        for (i=0, i<=9, i++);
-            
-
-        $("<ul/" , {
-            "class": "nytimes-articles",
-            html: items.join("")
-        }).appendTo("body");
-    });
-
-    $.ajax({
-        url: nytUrl,
-        method: 'GET',
-    })
-    .done(function(result) {
-        console.log(result);
-    })
-    .fail(function(err) {
-        throw err;
-    });
-
-    console.log(data);
-
+         articles = data.response.docs;
+         for (var i = 0; i < articles.length; i++) {
+            var article = articles[i];
+            $nytElem.append('<li class="article">' 
+            +'<a href="'+article.web_url+'">'
+            +article.headline.main
+            +'</a>'+
+            '<p>'
+            + article.snippet 
+            + 
+            '</p>'
+            +'</li>');
+    }; 
+})
     return false;
 };
-
 $('#form-container').submit(loadData);
-
-
-
-
-
-
-
-
-
-
