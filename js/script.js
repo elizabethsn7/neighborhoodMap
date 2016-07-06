@@ -27,22 +27,22 @@ function loadData() {
     + city + '&sort=newest&api-key=de86a3351556445e91e98a55763166a7'
     
     $.getJSON(nytUrl, function(data) {
-         $nytHeaderElem.text('New York Times Articles About ' + city);
+        $nytHeaderElem.text('New York Times Articles About ' + city);
 
-         articles = data.response.docs;
-         for (var i = 0; i < articles.length; i++) {
+        articles = data.response.docs;
+        for (var i = 0; i < articles.length; i++) {
             var article = articles[i];
             $nytElem.append('<li class="article">' 
             +'<a href="'+article.web_url+'">'
             +article.headline.main
-            +'</a>'+
-            '<p>'
-            + article.snippet 
-            + 
-            '</p>'
-            +'</li>');
-    }; 
-})
+            +'</a>'+'<p>' + article.snippet +'</p>'+'</li>');
+
+        };
+
+    }).error(function(e) {
+            $nytHeaderElem.text("New York Times Articles Cannot Be Loaded")
+        })
     return false;
+
 };
 $('#form-container').submit(loadData);
