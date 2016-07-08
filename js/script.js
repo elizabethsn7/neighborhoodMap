@@ -41,8 +41,39 @@ function loadData() {
 
     }).error(function(e) {
             $nytHeaderElem.text("New York Times Articles Cannot Be Loaded")
-        })
+        });
+
+
+        //Load wikipedia data
+    var wikiUrl = 'https://en.wikijkhgulgjkkpedia.org/w/api.php?action=opensearch&search=' + city + '&format=json&callback=wikiCallback';
+    var wikiReuestTimeout = setTimeout(function() {
+        $wikiElem.text("failed to get wikipedia resources");
+    }, 8000);
+
+        //YOUR CODE GOES HERE
+    $.ajax({
+        url: wikiUrl,
+        dataType: 'jsonp',
+        ///here I am wrapping the response in a function
+        success: function(response) {
+            var articleList = response[1];
+
+            for (var i = 0; i < articleList.length; i++) {
+                articleStr = articleList[i];
+                var url = 'https://en.wikipedia.org/wiki/' + articleStr;
+                $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li>');
+            };
+            clearTimeout(wikiReuestTimeout);
+        }
+
+    });
+
     return false;
 
 };
 $('#form-container').submit(loadData);
+
+
+
+
+
